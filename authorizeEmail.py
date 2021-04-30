@@ -1,8 +1,14 @@
 import argparse
 import re
+import os
+import json
 import O365
 from O365 import Account
 from O365 import FileSystemTokenBackend
+
+if not os.path.exists('auth'):
+    print('auth directory does not exist.  Creating...')
+    os.makedirs('auth')
 
 c = json.loads(open('secret/secret.json').read())
 
