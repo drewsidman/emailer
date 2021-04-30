@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# ignore folders
+auth/*
+secret/*
+
 # C extensions
 *.so
 
