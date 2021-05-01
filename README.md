@@ -7,7 +7,7 @@
 2. O365 library which can be downloaded via pip:
 
 ```
-pip3 install O365
+pip install O365
 ```
 
 ### Initial setup
