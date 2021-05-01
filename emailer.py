@@ -12,17 +12,17 @@ parser = argparse.ArgumentParser(description="Send email via M365 OAuth2.0 authe
 
 #required arguments
 req = parser.add_argument_group('Required arguments')
-req.add_argument('-t','--to', nargs='+', type=str, metavar='', required=True, help='To email address (space delimited)')
-req.add_argument('-u','--subject', type=str, metavar='', required=True, help='Email subject')
-req.add_argument('-o','--oauth', type=str, metavar='', required=True, help='Email account for authentication')
+req.add_argument('-t','--to', nargs='+', type=str, required=True, help='To email address, space delimited')
+req.add_argument('-u','--subject', type=str, required=True, help='Email subject')
+req.add_argument('-o','--oauth', type=str, required=True, help='Email account for authentication')
 
 #optional arguments
-parser.add_argument('-m','--message', type=str, metavar='', help='Email message')
-parser.add_argument('-a','--attachment', type=str, metavar='', help='Email attachment')
-parser.add_argument('-mf','--messageFile', type=str, metavar='', help='Email message as HTML file')
-parser.add_argument('-tm','--testMode', type=str, metavar='', help='Run in test mode, email will not send.')
-parser.add_argument('-cc','--cc', nargs='+', type=str, metavar='', help='CC email address')
-parser.add_argument('-bcc','--bcc', nargs='+', type=str, metavar='', help='BCC email address')
+parser.add_argument('-m','--message', type=str, help='Email message')
+parser.add_argument('-a','--attachment', nargs='+', type=str, help='Email attachment, space delimited')
+parser.add_argument('-mf','--messageFile', type=str, help='Email message as HTML file')
+parser.add_argument('-tm','--testMode', type=str, help='Run in test mode')
+parser.add_argument('-cc','--cc', nargs='+', type=str, help='CC email address, space delimited')
+parser.add_argument('-bcc','--bcc', nargs='+', type=str, help='BCC email address, space delimited')
 
 args = parser.parse_args()
 
@@ -51,6 +51,13 @@ account = Account(credentials, token_backend=token_backend)
 
 m = account.new_message()
 m.subject = args.subject
+
+if args.attachment is not None:
+    for i in args.attachment:
+        if os.path.isfile(i):
+            m.attachments.add(i)
+        else:
+            print(i, "is not a valid file.  Skipping...")
 
 if args.messageFile is not None:
     with open(args.messageFile) as f:
