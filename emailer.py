@@ -1,8 +1,9 @@
+#! /usr/bin/env python
+
 import argparse
 import re
 import os
 import json
-import O365
 from O365 import Account
 from O365 import FileSystemTokenBackend
 
@@ -45,11 +46,13 @@ if args.oauth not in tokens:
     print("Email address not authorized.  Use authorizeEmail.py to authorize a new email address.")
     exit()
 
-credentials = (c['client_id'], c['client_secret'])
+my_credentials = (c['client_id'], c['client_secret'])
 
-account = Account(credentials, token_backend=token_backend)
+account = Account(credentials=my_credentials, token_backend=token_backend)
 
-m = account.new_message()
+mailbox = account.mailbox()
+
+m = mailbox.new_message()
 m.subject = args.subject
 
 if args.attachment is not None:
